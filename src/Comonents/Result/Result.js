@@ -11,7 +11,7 @@ class Result extends React.Component{
     <td>{this.props.average_rating}</td>
     <td>{this.props.original_publication_year}</td>
     <td>{this.props.ratings_count}</td>
-    <td>{this.props.best_book}</td>
+    <td>{this.props.title}</td>
     <td>{this.props.name}</td>
     </tr>}
 }
