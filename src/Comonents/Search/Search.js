@@ -32,14 +32,23 @@ handleClick = ()=>{
       <input type="text" className="searchInput" value={this.state.inputValue} onChange={this.handleChange}/>
       <input type="submit" className='searchButton' onClick={this.handleClick} />
       <div>{this.state.work.length ===0 ?
-      <h1>No results...</h1>:
-      (this.state.work.work.map((item)=> <Result
+      <h1>No results...</h1>:<table>
+      <tr>
+   <th>Average rating</th>
+   <th>Publication year</th>
+   <th>Ratings count</th>
+   <th>Title</th>
+   <th>Author</th>
+ </tr>
+  {  (this.state.work.work.map((item)=> <Result
       average_rating={item.average_rating}
       original_publication_year={item.original_publication_year.__text}
       ratings_count={item.ratings_count.__text}
       best_book={item.best_book.title}
       name={item.best_book.author.name}
-      key={item.average_rating} /> ))}</div>
+      key={item.average_rating} /> ))}
+</table>
+    }</div>
 
 
      </div>
