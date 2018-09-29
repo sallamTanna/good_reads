@@ -11,7 +11,6 @@ var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
      this.state = {
        inputValue : '',
        work : [],
-       objectWork:'',
        data:''
      }
    }
@@ -22,26 +21,18 @@ var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
  handleClick = ()=>{
       fetch(`${proxyUrl}https://www.goodreads.com/search/index.xml?key=KJ1OgsxA9pCwNalhJi0Xg&q=${this.state.inputValue}`)
       .then((res)=>res.text())
-      .then((response)=>  {console.log('jjjjjjjjjfff', (x2js.xml2js(response).GoodreadsResponse.search.results.work));
-                            if(Array.isArray(x2js.xml2js(response).GoodreadsResponse.search.results.work)){
-                              return this.setState({work:x2js.xml2js(response).GoodreadsResponse.search.results.work})
-                            }else if(typeof x2js.xml2js(response).GoodreadsResponse.search.results.work =='object') {
-                                return this.setState({objectWork:x2js.xml2js(response).GoodreadsResponse.search.results.work})
-                              }
-       } )
-
+      .then((response)=> this.setState({work:x2js.xml2js(response).GoodreadsResponse.search.results.work}))
       .catch((error)=> console.log(error))
 }
 
-
+ 
 
    render(){
 
      return <div>
       <input type="text" className="searchInput" value={this.state.inputValue} onChange={this.handleChange}/>
       <input type="submit" className='searchButton' onClick={this.handleClick} />
-      {this.state.work.length ===0 ?
-      <h1>No results...</h1>:<tbody>
+      {this.state.work?<tbody>
       <tr>
    <th>Average rating</th>
    <th>Publication year</th>
@@ -49,32 +40,20 @@ var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
    <th>Title</th>
    <th>Author</th>
  </tr>
-  {  (this.state.work.map((item)=> <Result
-      average_rating={item.best_book.title}
+  {  (this.state.work.map((item, index)=><Result
+      average_rating={typeof item.average_rating=='string'? item.average_rating:item.__text}
       original_publication_year={item.original_publication_year.__text}
       ratings_count={item.ratings_count.__text}
       name={item.best_book.author.name}
-      title={item.best_book.title} 
+      title={item.best_book.title}
 
-      key={item.average_rating} /> ))}
-</tbody>
+      key={index} />))}
+</tbody>:
+      <h1>No results for this book!</h1>
     }
 
 
-    {this.state.objectWork && <tbody>
-    <tr>
- <th>Average rating</th>
- <th>Publication year</th>
- <th>Ratings count</th>
- <th>Title</th>
- <th>Author</th>
-</tr>
-<Result average_rating={this.state.objectWork.average_rating}
-        original_publication_year={this.state.objectWork.original_publication_year.__text}
-        ratings_count={this.state.objectWork.ratings_count.__text}
-        name={this.state.objectWork.best_book.author.name}
-        title={this.state.objectWork.best_book.title}       />
-</tbody>}
+
 
 
      </div>
